@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每周组会汇报归档</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        academic: {
+                            50: 'var(--bg-light)',
+                            100: '#f3f4f6',
+                            800: 'var(--primary-dark)',
+                            900: '#111827',
+                            blue: 'var(--primary-color)',
+                            accent: 'var(--primary-light)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* =========================================
+           CSS 变量定义
+           ========================================= */
+        :root {
+            /* 主色调 - UESTC Blue */
+            --primary-color: #115EA2;
+            --primary-dark: #0D477A;
+            --primary-light: #2a7bbd;
+            
+            /* 尺寸变量 */
+            --header-height: 50px;
+            --footer-height: 60px;
+            
+            /* 文字颜色 */
+            --text-dark: #2d3436;
+            --text-normal: #444;
+            --text-muted: #636e72;
+            --text-light: #888;
+            
+            /* 背景颜色 */
+            --bg-light: #f9f9f9;
+            --bg-white: #ffffff;
+            --bg-gray: #f8f9fa;
+            
+            /* 边框颜色 */
+            --border-light: #e9ecef;
+            --border-normal: #ddd;
+            
+            /* 字体变量 */
+            --font-serif: "Georgia", "Times New Roman", Times, serif;
+            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+
+        /* 全局基础样式 */
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: var(--bg-gray);
+            color: var(--text-dark);
+        }
+
+        /* --- 左侧侧边栏日历样式 --- */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            border-top: 1px solid var(--border-normal);
+            border-left: 1px solid var(--border-normal);
+        }
+        .calendar-cell {
+            min-height: 50px; /* 缩小高度适配侧边栏 */
+            border-right: 1px solid var(--border-normal);
+            border-bottom: 1px solid var(--border-normal);
+            padding: 2px;
+            background: var(--bg-white);
+            transition: all 0.1s;
+            position: relative;
+        }
+        .calendar-cell:hover {
+            background-color: var(--bg-light);
+        }
+        .calendar-header-cell {
+            background-color: var(--border-light);
+            font-weight: bold;
+            text-align: center;
+            padding: 4px;
+            border-right: 1px solid var(--border-normal);
+            border-bottom: 1px solid var(--border-normal);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-normal);
+        }
+        /* 日历上的小圆点标记 */
+        .meeting-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            margin: 2px auto 0;
+        }
+
+        /* --- 右侧主区归档列表样式 --- */
+        .archive-container {
+            padding: 40px;
+            background-color: var(--bg-white);
+            height: 100%;
+            overflow-y: auto;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .archive-header {
+            font-family: var(--font-serif);
+            font-weight: normal;
+            font-size: 1.8rem;
+            border-bottom: 2px solid var(--text-dark);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            letter-spacing: 0.02em;
+            color: var(--text-dark);
+        }
+
+        .archive-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .archive-item {
+            display: flex;
+            align-items: baseline;
+            /* 紧凑调整：减小垂直 padding */
+            padding: 10px 0; 
+            border-bottom: 1px solid var(--border-light);
+            transition: background-color 0.2s ease;
+        }
+
+        .archive-item:hover {
+            background-color: #fafafa;
+        }
+
+        .archive-item:last-child {
+            border-bottom: none;
+        }
+
+        .date {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            width: 140px;
+            flex-shrink: 0;
+        }
+
+        .title-link {
+            font-family: var(--font-serif);
+            font-size: 1.15rem; /* 稍微调整字体大小 */
+            color: var(--text-dark);
+            text-decoration: none;
+            flex-grow: 1;
+            cursor: pointer;
+            display: block;
+            margin-bottom: 0; /* 移除底部 margin，因为没有描述了 */
+        }
+        
+        .title-link:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 3px;
+        }
+        
+        /* 侧边栏本月列表样式 */
+        .month-list-item {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.85rem;
+        }
+        .month-list-item:last-child {
+            border-bottom: none;
+        }
+        .month-list-date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            display: block;
+            margin-bottom: 2px;
+        }
+        .month-list-title {
+            font-weight: bold;
+            color: var(--primary-dark);
+            cursor: pointer;
+        }
+        .month-list-title:hover {
+            text-decoration: underline;
+        }
+
+        /* 滚动条美化 */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-light); }
+        ::-webkit-scrollbar-thumb { background: var(--border-normal); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-light); }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <!-- Header Section -->
+    <header class="bg-academic-blue text-white px-6 py-3 shadow-md shrink-0 flex justify-between items-center border-b-4 border-academic-800">
+        <div>
+            <h1 class="text-xl font-bold tracking-wide uppercase">每周组会汇报归档</h1>
+            <p class="text-xs text-gray-300 font-sans tracking-wider">每周进度汇报与文献综述</p>
+        </div>
+        <div class="text-right">
+            <div id="clock" class="text-sm font-mono text-gray-300"></div>
+            <div class="text-xs text-white">维护人：xxx</div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <div class="flex flex-1 overflow-hidden">
+        
+        <!-- Left Panel: Sidebar (Calendar & Monthly List) - ~30% -->
+        <aside class="w-[320px] flex-shrink-0 flex flex-col border-r border-gray-300 bg-white z-10 shadow-lg">
+            
+            <!-- 1. Calendar Section -->
+            <div class="p-4 border-b border-gray-200 bg-gray-50">
+                <!-- Controls -->
+                <div class="flex justify-between items-center mb-3">
+                    <button onclick="changeMonth(-1)" class="text-xs font-bold text-gray-600 hover:text-black">◀</button>
+                    <h2 id="currentMonthDisplay" class="text-lg font-bold text-academic-800 font-serif"></h2>
+                    <button onclick="changeMonth(1)" class="text-xs font-bold text-gray-600 hover:text-black">▶</button>
+                    <button onclick="goToToday()" class="ml-2 text-[10px] border px-2 py-1 uppercase tracking-wide hover:bg-black hover:text-white transition">今天</button>
+                </div>
+
+                <!-- Grid -->
+                <div class="grid grid-cols-7 border-t border-l border-gray-300 bg-gray-100">
+                    <div class="calendar-header-cell text-red-800">日</div>
+                    <div class="calendar-header-cell">一</div>
+                    <div class="calendar-header-cell">二</div>
+                    <div class="calendar-header-cell">三</div>
+                    <div class="calendar-header-cell">四</div>
+                    <div class="calendar-header-cell">五</div>
+                    <div class="calendar-header-cell text-red-800">六</div>
+                </div>
+                <div id="calendarGrid" class="calendar-grid border-l border-t-0 border-gray-300">
+                    <!-- JS will inject cells here -->
+                </div>
+            </div>
+
+            <!-- 2. Monthly List Section -->
+            <div class="flex-1 overflow-y-auto bg-white flex flex-col">
+                <div class="px-4 py-3 bg-gray-100 border-b border-gray-200 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    本月汇报 (<span id="monthlyCount">0</span>)
+                </div>
+                <div id="monthlyList" class="divide-y divide-gray-100">
+                    <!-- JS will inject monthly items here -->
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Panel: Main Archive List - ~70% -->
+        <main class="flex-1 overflow-y-auto bg-white">
+            <div class="archive-container">
+                <h1 class="archive-header">所有汇报归档</h1>
+                <ul id="archiveList" class="archive-list">
+                    <!-- Javascript will populate this full list -->
+                </ul>
+                <div class="mt-8 text-center text-xs font-sans border-t pt-4" style="color: var(--text-light); border-color: var(--border-light);">
+                    共 <span id="totalCount">0</span> 份文档
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+    <!-- Modal for Quick Preview -->
+    <div id="infoModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white max-w-lg w-full p-6 shadow-2xl border-2" style="border-color: var(--primary-dark);">
+            <h3 id="modalTitle" class="text-xl font-bold mb-2 font-serif" style="color: var(--text-dark);"></h3>
+            <p id="modalDate" class="text-sm mb-4 font-mono" style="color: var(--text-muted);"></p>
+            <p id="modalDesc" class="text-base mb-6 leading-relaxed font-serif" style="color: var(--text-normal);"></p>
+            <div class="flex justify-end space-x-3 font-sans text-sm">
+                <button onclick="closeModal()" class="px-4 py-2 border hover:bg-gray-100" style="border-color: var(--border-normal); color: var(--text-normal);">关闭</button>
+                <a id="modalLink" href="#" target="_blank" class="px-4 py-2 bg-academic-blue text-white hover:bg-black">打开演示文稿</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // CONFIGURATION: YOUR DATA GOES HERE
+        // ==========================================
+const filesData = [
+    {
+        date: '2026-01-04',
+        title: 'slide-temp',
+        type: '模板',
+        link: 'slide-temp.html'
+    },
+];
+        // ==========================================
+        // LOGIC
+        // ==========================================
+
+        let currentDate = new Date();
+        const monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
+
+        function init() {
+            renderCalendar();
+            renderArchiveList(); 
+            updateClock();
+            setInterval(updateClock, 60000);
+        }
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toISOString().split('T')[0];
+        }
+
+        function changeMonth(delta) {
+            currentDate.setMonth(currentDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        function goToToday() {
+            currentDate = new Date();
+            renderCalendar();
+        }
+
+        function getMeetingsForDate(dateStr) {
+            return filesData.filter(m => m.date === dateStr);
+        }
+
+        function getMeetingsForMonth(year, month) {
+            return filesData.filter(m => {
+                const d = new Date(m.date);
+                return d.getFullYear() === year && d.getMonth() === month;
+            }).sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
+
+        function getAllMeetings() {
+            return [...filesData].sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            document.getElementById('currentMonthDisplay').innerText = `${year}年 ${monthNames[month]}`;
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            
+            const startDayOfWeek = firstDay.getDay(); // 0 = Sun
+            const daysInMonth = lastDay.getDate();
+
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+
+            // Previous month padding
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+            for (let i = 0; i < startDayOfWeek; i++) {
+                const dayNum = prevMonthLastDay - startDayOfWeek + 1 + i;
+                const cell = createCell(dayNum, true);
+                grid.appendChild(cell);
+            }
+
+            // Current month days
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                const meetings = getMeetingsForDate(dateStr);
+                const cell = createCell(i, false, dateStr, meetings);
+                grid.appendChild(cell);
+            }
+
+            // Next month padding
+            const totalCells = startDayOfWeek + daysInMonth;
+            const remaining = 7 - (totalCells % 7);
+            if (remaining < 7) {
+                for (let i = 1; i <= remaining; i++) {
+                    const cell = createCell(i, true);
+                    grid.appendChild(cell);
+                }
+            }
+
+            // Render Monthly List below calendar
+            renderMonthlyList(year, month);
+        }
+
+        function createCell(dayNum, isPadding, dateStr = null, meetings = []) {
+            const div = document.createElement('div');
+            // Use vars for padding bg
+            const bgClass = isPadding ? 'bg-[var(--bg-light)] text-[var(--text-light)]' : 'text-[var(--text-dark)]';
+            div.className = `calendar-cell cursor-default ${bgClass}`;
+            
+            const dateLabel = document.createElement('div');
+            dateLabel.className = 'text-center text-xs font-bold mt-1';
+            dateLabel.innerText = dayNum;
+
+            if (dateStr && dateStr === new Date().toISOString().split('T')[0]) {
+                div.style.backgroundColor = 'var(--bg-light)';
+                dateLabel.style.color = 'var(--primary-color)';
+                dateLabel.style.border = '1px solid var(--primary-color)';
+                dateLabel.style.borderRadius = '50%';
+                dateLabel.style.width = '20px';
+                dateLabel.style.height = '20px';
+                dateLabel.style.margin = '2px auto';
+                dateLabel.style.lineHeight = '18px';
+            }
+
+            div.appendChild(dateLabel);
+
+            // Add dots for meetings
+            if (meetings.length > 0) {
+                div.classList.add('cursor-pointer');
+                div.onclick = () => openModal(meetings[0]); 
+                meetings.forEach(m => {
+                    const dot = document.createElement('div');
+                    dot.className = 'meeting-dot';
+                    dot.title = m.title;
+                    div.appendChild(dot);
+                });
+            }
+            return div;
+        }
+
+        function renderMonthlyList(year, month) {
+            const container = document.getElementById('monthlyList');
+            const countLabel = document.getElementById('monthlyCount');
+            const meetings = getMeetingsForMonth(year, month);
+            
+            container.innerHTML = '';
+            countLabel.innerText = meetings.length;
+
+            if (meetings.length === 0) {
+                container.innerHTML = '<div class="p-4 text-center text-gray-400 text-xs italic">本月暂无汇报</div>';
+                return;
+            }
+
+            meetings.forEach(m => {
+                const div = document.createElement('div');
+                div.className = 'month-list-item hover:bg-blue-50 transition';
+                
+                const date = document.createElement('span');
+                date.className = 'month-list-date';
+                date.innerText = m.date + ' | ' + m.type;
+
+                const title = document.createElement('div');
+                title.className = 'month-list-title';
+                title.innerText = m.title;
+                title.onclick = () => openModal(m);
+
+                div.appendChild(date);
+                div.appendChild(title);
+                container.appendChild(div);
+            });
+        }
+
+        function renderArchiveList() {
+            const listContainer = document.getElementById('archiveList');
+            const allMeetings = getAllMeetings();
+            
+            document.getElementById('totalCount').innerText = allMeetings.length;
+            listContainer.innerHTML = '';
+
+            allMeetings.forEach(meeting => {
+                const li = document.createElement('li');
+                li.className = 'archive-item group';
+
+                const dateSpan = document.createElement('span');
+                dateSpan.className = 'date';
+                dateSpan.innerText = meeting.date;
+
+                const contentDiv = document.createElement('div');
+                contentDiv.style.flexGrow = '1';
+                
+                const titleLink = document.createElement('a');
+                titleLink.className = 'title-link';
+                titleLink.innerText = meeting.title;
+                
+                if (meeting.link && meeting.link !== '#') {
+                    titleLink.href = meeting.link;
+                    titleLink.target = "_blank";
+                } else {
+                    titleLink.href = "javascript:void(0)";
+                    titleLink.onclick = () => openModal(meeting);
+                }
+
+                // 移除了摘要显示的逻辑 (Removed description logic for compact view)
+                // const desc = document.createElement('div'); ...
+
+                contentDiv.appendChild(titleLink);
+                // contentDiv.appendChild(desc);
+                
+                li.appendChild(dateSpan);
+                li.appendChild(contentDiv);
+                listContainer.appendChild(li);
+            });
+        }
+
+        function openModal(meeting) {
+            document.getElementById('modalTitle').innerText = meeting.title;
+            document.getElementById('modalDate').innerText = `${meeting.date} | ${meeting.type}`;
+            document.getElementById('modalDesc').innerText = meeting.desc;
+            document.getElementById('modalLink').href = meeting.link;
+            document.getElementById('infoModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('infoModal').classList.add('hidden');
+        }
+
+        document.getElementById('infoModal').onclick = function(e) {
+            if (e.target === this) closeModal();
+        }
+
+        init();
+    </script>
+</body>
+</html>

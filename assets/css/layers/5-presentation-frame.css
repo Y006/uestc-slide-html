@@ -1,0 +1,106 @@
+/* =========================================
+   My-HTML-PPT-Template - 演示框架样式
+   版本: 1.0.0
+   说明: 此文件包含演示框架相关的样式(顶部导航栏、底部页脚)
+   ========================================= */
+
+/* =========================================
+   1. 顶部导航栏
+   ========================================= */
+.ppt-header {
+    height: var(--header-height);
+    flex-shrink: 0;
+    background: linear-gradient(to bottom, var(--primary-dark) 100%, #003366 0%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.header-section {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s;
+}
+
+.header-section:last-child {
+    border-right: none;
+}
+
+.header-section.active-chapter {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    font-weight: bold;
+}
+
+.header-title {
+    font-size: 16px;
+    margin-bottom: 4px;
+    cursor: pointer;
+}
+
+.header-dots {
+    display: flex;
+    gap: 6px;
+    height: 8px;
+    align-items: center;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dot:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: scale(1.2);
+}
+
+.dot.active-page {
+    background: white;
+    width: 8px;
+    height: 8px;
+    box-shadow: 0 0 4px white;
+}
+
+/* =========================================
+   2. 底部页脚
+   ========================================= */
+.ppt-footer {
+    height: var(--footer-height);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    color: white;
+}
+
+.footer-upper {
+    flex: 1;
+    background-color: var(--primary-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+}
+
+.footer-lower {
+    flex: 1;
+    background-color: var(--primary-dark);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+}

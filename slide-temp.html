@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 核心样式 -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-one-light.min.css" rel="stylesheet">
+    <script src="assets/js/config.js"></script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+    <script src="assets/js/core.js"></script>
+    
+    
+    <title>网页标签页标题</title>
+    <!-- 标题页信息和页脚信息 -->
+    <script>
+        const slideData = {
+            reportType: "文献汇报",
+            paperTitle: "Title of the paper",
+            authors: "张三<sup>1</sup> &nbsp;&nbsp; 李四<sup>1</sup> &nbsp;&nbsp; ",
+            affiliations: [
+                "<sup>1</sup> 电子科技大学",
+            ],
+            publishLabel: "出版：CVPR 2024", 
+            presenter: "汇报人：xxx",
+            reportDate: "汇报日期：2026-01-04"
+        };
+
+        // 页脚配置
+        PPT_CONFIG.footer.author = slideData.presenter;
+        PPT_CONFIG.footer.paper_name = slideData.paperTitle;
+        PPT_CONFIG.footer.title = slideData.reportDate;
+
+        // 页面初始化
+        window.onload = function() {
+            document.getElementById('report-type').innerHTML = slideData.reportType;
+            document.getElementById('paper-title').innerHTML = slideData.paperTitle;
+            document.getElementById('authors-list').innerHTML = slideData.authors;
+            document.getElementById('publish-container').innerHTML = slideData.publishLabel;
+            
+            const affContainer = document.getElementById('affiliations-container');
+            affContainer.innerHTML = slideData.affiliations.map(aff => `<div>${aff}</div>`).join('');
+        };
+    </script>
+
+</head>
+<body>
+    <div id="stage">
+        
+        <!-- ========================================== -->
+        <!-- 封面页：文献信息 -->
+        <!-- ========================================== -->
+        <div class="slide active layout-cover" data-chapter-id="title" data-chapter-title="标题页">
+            <div class="ppt-body" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #fff;">
+                
+                <div id="title-box" style="width: 90%; max-width: 1200px; background-color: rgb(17, 94, 162); color: white; padding: 50px 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); text-align: center; margin-bottom: 50px; position: relative;">
+                    
+                    <div id="report-type" style="font-size: 42px; font-weight: 400; letter-spacing: 5px; margin-bottom: 25px; opacity: 0.95;"></div>
+
+                    <h1 id="paper-title" style="font-size: 40px; margin: 0; font-weight: 600; line-height: 1.3; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.2);"></h1>
+                </div>
+
+                <div style="text-align: center; color: #000; width: 100%; max-width: 1100px;">
+                    
+                    <div id="authors-list" style="font-size: 26px; margin-bottom: 25px; font-weight: 500; color: #000;"></div>
+                    
+                    <div id="affiliations-container" style="font-size: 20px; color: #333; margin-bottom: 40px; line-height: 1.6;"></div>
+                    
+                    <div style="font-size: 22px; color: #000; font-weight: 500; margin-top: 10px;">
+                        <div id="publish-container" style="margin-bottom: 10px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 研究背景 -->
+        <!-- ========================================== -->
+        <div class="slide layout-grid layout-grid-2" data-chapter-id="background" data-chapter-title="研究背景">
+            <div class="ppt-body">
+                <div class="page-header">
+                    <h1>标题</h1>
+                    <p>副标题：本页展示了双栏 + card 组件的使用</p>
+                </div>
+                <div class="grid-container">
+                    <div class="card">
+                        <div class="card-title">
+                            图片展示
+                        </div>
+                        <div class="card-body" style="max-height: 650px; overflow-y: auto;">
+                            <!-- 列表展示 -->
+                            <ol>
+                                <li><strong>第一项：换行展示</strong>
+                                    <br>内容示例：「在这份报告中，我们将探讨影响冰川流体动力学各种因素，以及它们如何影响这些自然结构的形成和行为。」
+                                    <br>内容示例：「在这份报告中，我们将探讨影响冰川流体动力学各种因素，以及它们如何影响这些自然结构的形成和行为。」
+                                </li>
+                                <li><strong>第二项：子列表</strong>
+                                    <ul>
+                                        <li>「渲染是一个将包含几何形状、材质、光照及观测视角的计算机场景模型，通过特定的算法转化为二维图像的过程。」</li>
+                                        <li>「渲染」</li>
+                                    </ul>
+                                </li>
+                                <li><strong>第三项：数学公式</strong>
+                                    <div>「我们首先依据质能方程 $E=mc^2$ 来计算基础能量，随后引入欧拉公式 $e^{i\pi} + 1 = 0$ 进行复数域的转换。最终的流体动力学损失函数定义如下：」</div>
+                                    $$ J(\theta) = \frac{1}{2m} \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})^2 $$
+                                </li>
+                                <li><strong>第四项：滚动条</strong>
+                                    <ol>
+                                        <li>当内容过于长的时候，会出现滚动条，可以滑动展示未显示的内容。</li>
+                                        <li>不会挤压底部的页脚使得页脚内容消失。</li>
+                                        <li>这个过程是通过「<code>&lt;div class="card-body" style="max-height: 650px; overflow-y: auto;"&gt;&lt;/div&gt;</code>」中的「<code>max-height: 650px</code>」来控制的</li>
+                                    </ol>
+                                </li>
+                            </ol>
+                            <!-- 列表展示 -->
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title">
+                            列表展示
+                        </div>
+                        <div class="card-body" style="max-height: 650px; overflow-y: auto;">
+                            这里是卡片里面的默认文本样式，字体比较小，可以对每一个字进行字体调整；不过在日常使用时应该以列表为主
+                            <br>
+                            下面展示了一张图片：这里的图片使用的是来自网络的超链接
+                            <!-- 图片展示 -->
+                            <figure style="text-align:center; margin: 25px 0 0 0;">
+                                <img src="https://vi.uestc.edu.cn/wp-content/uploads/2020/06/11-1.png" style="width: 65%; margin: 0 auto; display: block; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; transition: transform 0.2s;" class="zoomable-img" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                                <figcaption style="margin-top: 10px; font-size: 20px; color: #666;">
+                                    图片的 caption
+                                </figcaption>
+                            </figure>
+                            <!-- 图片展示 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 创新点与方法论 -->
+        <!-- ========================================== -->
+
+        <div class="slide layout-grid layout-grid-3" data-chapter-id="contribution" data-chapter-title=" 创新点">
+            <div class="ppt-body">
+                <div class="page-header">
+                    <h1>标题</h1>
+                    <p>三栏 + card 的一个展示</p>
+                </div>
+                
+                <div class="grid-container">
+                    
+                    <div class="card card-academic-blue">
+                        <div class="card-title">列表展示</div>
+                        <div class="card-body"style="max-height: 650px; overflow-y: auto;">
+                            <!-- 列表展示 -->
+                            <ol>
+                                <li><strong>第一项：换行展示</strong>
+                                    <br>内容示例：「在这份报告中，我们将探讨影响冰川流体动力学各种因素，以及它们如何影响这些自然结构的形成和行为。」
+                                    <br>内容示例：「在这份报告中，我们将探讨影响冰川流体动力学各种因素，以及它们如何影响这些自然结构的形成和行为。」
+                                </li>
+                                <li><strong>第二项：子列表</strong>
+                                    <ul>
+                                        <li>「渲染是一个将包含几何形状、材质、光照及观测视角的计算机场景模型，通过特定的算法转化为二维图像的过程。」</li>
+                                        <li>「渲染」</li>
+                                    </ul>
+                                </li>
+                                <li><strong>第三项：数学公式</strong>
+                                    <div>「我们首先依据质能方程 $E=mc^2$ 来计算基础能量，随后引入欧拉公式 $e^{i\pi} + 1 = 0$ 进行复数域的转换。最终的流体动力学损失函数定义如下：」</div>
+                                    $$ J(\theta) = \frac{1}{2m} \sum_{i=1}^m (h_\theta(x^{(i)}) - y^{(i)})^2 $$
+                                </li>
+                                <li><strong>第四项：滚动条</strong>
+                                    <ol>
+                                        <li>当内容过于长的时候，会出现滚动条，可以滑动展示未显示的内容。</li>
+                                        <li>不会挤压底部的页脚使得页脚内容消失。</li>
+                                        <li>这个过程是通过「<code>&lt;div class="card-body" style="max-height: 650px; overflow-y: auto;"&gt;&lt;/div&gt;</code>」中的「<code>max-height: 650px</code>」来控制的</li>
+                                    </ol>
+                                </li>
+                            </ol>
+                            <!-- 列表展示 -->
+                        </div>
+                    </div>
+
+                    <div class="card card-academic-green">
+                        <div class="card-title">一个空白的 card</div>
+                        <div class="card-body" style="max-height: 650px; overflow-y: auto;">
+                            card 的样式在 assets/css/layers/3-layout.css 里面
+                        </div>
+                    </div>
+
+                    <div class="card card-academic-red">
+                        <div class="card-title">展示如何编写一个 github 链接卡片</div>
+                        <div class="card-body" style="max-height: 650px; overflow-y: auto;">
+
+                            <a href="https://github.com/PicoTrex/Awesome-Nano-Banana-images" target="_blank" class="github-card">
+                                <div class="github-header">
+                                    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" class="github-icon">
+                                        <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"></path>
+                                    </svg>
+                                    <span class="github-repo-name">Awesome-Nano-Banana-images</span>
+                                </div>
+                                <div class="github-description">
+                                    里面收集了Nano-banana/Nano-banana-pro在各个任务场景下生成的令人惊艳的图片和提示词。
+                                </div>
+                                <div class="github-footer">
+                                    <span class="footer-item">
+                                        <span class="language-color" style="background-color: #8b9bb4;"></span>
+                                        Markdown
+                                    </span>
+                                    <span class="footer-item">Public</span>
+                                </div>
+                            </a>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ========================================== -->
+        <!-- 实验结果 -->
+        <!-- ========================================== -->
+
+        <!-- ========================================== -->
+        <!-- 结束页 -->
+        <!-- ========================================== -->
+        <div class="slide layout-cover" data-chapter-id="end" data-chapter-title="结束">
+            <div class="ppt-body" style="text-align:center; padding-top:120px;">
+                <h1 style="font-size: 120px; font-weight:700;">
+                    Thanks!
+                </h1>
+                <p style="font-size: 30px; color:#999; margin-top: 60px;">
+                    jinyuqiu@std.uestc.edu.cn
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 图片预览 Modal -->
+    <div id="imgModal" class="img-modal">
+        <span class="close" onclick="document.getElementById('imgModal').style.display='none'">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
+
+    <!-- 图片放大功能脚本 -->
+    <script>
+        // 为所有可缩放图片添加点击事件
+        document.addEventListener('DOMContentLoaded', function() {
+            const zoomableImages = document.querySelectorAll('.zoomable-img');
+            const modal = document.getElementById('imgModal');
+            const modalImg = document.getElementById('modalImg');
+            
+            zoomableImages.forEach(function(img) {
+                img.addEventListener('click', function() {
+                    modal.style.display = 'block';
+                    modalImg.src = this.src;
+                });
+            });
+            
+            // 点击模态框背景关闭
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // ESC键关闭
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+/* =========================================
+   My-HTML-PPT-Template - 全局样式
+   版本: 1.0.0
+   说明: 此文件包含全局基础样式和排版
+   ========================================= */
+
+/* =========================================
+   1. 基础布局
+   ========================================= */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #e0e5ec;
+    overflow: hidden;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+#stage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slide {
+    width: 1920px;
+    height: 1080px;
+    flex-shrink: 0;
+    display: none;
+    background-color: white;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    position: relative;
+    flex-direction: column;
+}
+
+.slide.active {
+    display: flex;
+}
+
+/* =========================================
+   2. 基础排版
+   ========================================= */
+h1 {
+    color: var(--primary-color);
+    margin: 0 0 30px 0;
+    font-size: 60px;
+}
+
+h2 {
+    color: var(--primary-color);
+    margin: 0 0 20px 0;
+    font-size: 45px;
+}
+
+h3 {
+    color: var(--text-dark);
+    margin: 0 0 15px 0;
+    font-size: 32px;
+}
+
+
+
+/* =========================================
+   3. 滚动条美化
+   ========================================= */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* =========================================
+   4. 打印支持
+   ========================================= */
+@media print {
+    body {
+        overflow: visible;
+        background: white;
+    }
+    
+    #stage {
+        transform: none !important;
+        position: static;
+        width: 100%;
+        height: auto;
+    }
+    
+    .slide {
+        break-after: page;
+        page-break-after: always;
+        display: flex !important;
+        margin: 0;
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .ppt-header,
+    .ppt-footer {
+        display: none;
+    }
+    
+    .card-body {
+        overflow: visible;
+    }
+}
